@@ -1,0 +1,5 @@
+<Response>
+    <Say>Message recorded at {{date}}</Say>
+    <Play>{{url}}</Play>
+    <Redirect method="POST">/api/messages/{{id}}/markRead</Redirect>
+</Response>

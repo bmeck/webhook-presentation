@@ -1,0 +1,8 @@
+<Response>
+    <Say>Please record your message</Say>
+    <Record action="/api/messages" playBeep="true" />
+    <Say>
+        I am sorry I did not hear anything. Going to main menu
+    </Say>
+    <Redirect>/twilio/menu.xml</Redirect>
+</Response>

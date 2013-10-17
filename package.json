@@ -1,0 +1,23 @@
+{
+  "name": "webhooks",
+  "version": "0.0.0",
+  "description": "ERROR: No README.md file found!",
+  "main": "index.js",
+  "dependencies": {
+    "express": "~3.4.0",
+    "handlebars": "~1.0.12",
+    "pretty-data": "~0.40.0",
+    "request": "~2.27.0",
+    "xml2js": "~0.2.8",
+    "mkdirp": "~0.3.5",
+    "uuid": "~1.4.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "",
+  "author": "",
+  "license": "BSD"
+}

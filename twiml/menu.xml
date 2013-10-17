@@ -1,0 +1,8 @@
+<Response>
+    <Say>Main menu:</Say>
+    <Gather action="/actions/fromKeys" numDigits="1" timeout="30">
+        <Say>Press 1 to hear messages.</Say>
+        <Say>Press 2 to record a message.</Say>
+    </Gather>
+    <Say>Goodbye</Say>
+</Response>
