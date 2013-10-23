@@ -1,5 +1,4 @@
 // System setup
-
 var path    = require('path');
 var fs      = require('fs');
 
@@ -11,7 +10,6 @@ var uuid    = require('uuid');
 var app     = express();
 app.use(express.urlencoded());
 
-
 // Our "Database"
 var messages = {};
 var people   = {};
@@ -19,13 +17,13 @@ var people   = {};
 // Storage for twiml
 app.use('/twilio/', express.static('twiml'));
 
-// API
-
+// Templated Twilio stuff
 var templates = {
     readMessages: hbs.compile(fs.readFileSync(path.join(__dirname, 'twiml', 'read-messages.xml')).toString()),
     redirect: hbs.compile(fs.readFileSync(path.join(__dirname, 'twiml', 'redirect.xml')).toString())
 }
 
+// API
 app.post('/api/messages', function (req, res, next) {
     var phoneNumber = req.query.From;
     var url = req.body.RecordingUrl;
@@ -65,7 +63,7 @@ app.get('/api/messages', function (req, res, next) {
 });
 
 app.post('/api/messages/:messageId/markRead', function (req, res, next) {
-    var phoneNumber = req.query.From;
+    var phoneNumber = req.body.From;
     var messageId = req.params.messageId;
     if (!/\+\d+/.test(phoneNumber)) {
         res.send(400);
@@ -80,16 +78,15 @@ app.post('/actions/fromKeys', function (req, res, next) {
     var url = req.body.Digits;
     switch (url) {
         case '1':
-    res.send(200, templates.redirect({url:'/api/messages'}));
+            res.send(200, templates.redirect({url:'/api/messages'}));
             return;
         case '2':
-            res.redirect('/twilio/record-message.xml');
+            res.send(200, templates.redirect({url:'/twilio/record-message.xml'}));
             return;
     }
 });
 
 // Startup
-
 var http = require('http');
 var server = http.createServer(app);
 server.listen(process.env.PORT || 8080, function () {
