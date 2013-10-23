@@ -2,9 +2,6 @@
 
 var path    = require('path');
 var fs      = require('fs');
-var mkdirp  = require('mkdirp');
-
-mkdirp(path.join(__dirname, 'docs'));
 
 // Application code
 var hbs     = require('handlebars');
@@ -18,9 +15,6 @@ app.use(express.urlencoded());
 // Our "Database"
 var messages = {};
 var people   = {};
-
-// Storage for mp3s
-app.use('/docs', express.static('docs'));
 
 // Storage for twiml
 app.use('/twilio/', express.static('twiml'));
@@ -39,24 +33,12 @@ app.post('/api/messages', function (req, res, next) {
     while (id in messages) {
         id = uuid();
     }
-    var file = path.join(__dirname, 'docs', id + '.mp3');
-    console.log('GRABBING', url)
-    request(url + '.mp3', function (err, res, body) {
-        console.log(res.statusCode, body)
-        if (err) {
-            res.send(400, err.message);
-        }
-    }).pipe(fs.createWriteStream(file))
-    .on('error', function (err){
-        res.send(500, err.message);
-    })
-    .on('close', function (){
-        messages[id] = {
-            date: new Date(),
-            phoneNumber: phoneNumber
-        };
-        res.send(200, templates.redirect({url:'/twilio/menu.xml'}));
-    })
+    messages[id] = {
+        date: new Date(),
+        phoneNumber: phoneNumber,
+        url: url
+    };
+    res.send(200, templates.redirect({url:'/twilio/menu.xml'}));
 });
 
 app.get('/api/messages', function (req, res, next) {
@@ -74,7 +56,7 @@ app.get('/api/messages', function (req, res, next) {
         res.send(200, templates.readMessages({
             id: firstUnreadMessageId,
             date: firstUnreadMessage.date,
-            url: '/docs/' + firstUnreadMessageId + '.mp3'
+            url: firstUnreadMessage.url 
         }));
     }
     else {
